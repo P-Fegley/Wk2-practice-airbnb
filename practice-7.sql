@@ -17,3 +17,20 @@
 -- | Entire villa                        | 75       | 2021-10-12                 |
 
 
+SELECT listings.property_type, COUNT(reviews.id) AS reviews, MAX(reviews.date_reviewed) AS latest_review
+FROM listings
+INNER JOIN reviews ON listings.id = reviews.listing_id
+GROUP BY listings.property_type;
+
+
+-- I spent so long on the below method before realizing all I needed was a MAX function
+SELECT listings.property_type, COUNT(reviews.id) AS reviews, MAX(reviews.date_reviewed) AS latest_review
+FROM (
+    SELECT reviews.id, listings.property_type, reviews.date_reviewed
+    FROM listings
+    INNER JOIN reviews ON listings.id = reviews.listing_id
+    ORDER BY reviews.date_reviewed DESC
+) AS reviews_by_newest
+INNER JOIN reviews ON reviews_by_newest.id = reviews.id
+INNER JOIN listings ON reviews.listing_id = listings.id
+GROUP BY listings.property_type;
