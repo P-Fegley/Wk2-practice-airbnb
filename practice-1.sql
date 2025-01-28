@@ -4,4 +4,6 @@
 -- | 302750   |
 -- +----------+
 
+SELECT COUNT(id)
+FROM reviews;
 
